@@ -1,0 +1,48 @@
+version: 0.2
+
+phases:
+  # install:
+  #   runtime-versions:
+  #     nodejs: 12
+  #   commands:
+  #     - echo "Installing AWS CLI..."
+  #     - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+  #     - unzip awscliv2.zip
+  #     - sudo ./aws/install
+  #     - aws --version
+  pre_build:
+    commands:
+      - AWS_ACCOUNT_ID=167693783846
+      - AWS_REGION=us-west-2
+      - IMAGE_REPO_NAME=node-simple
+      - echo Logging in to Docker Hub...
+      - docker login --username haidoanqtvn --password dckr_pat_87jlcMO2bgwUzdXjNhap2A5lYSE
+      # - IMAGE_TAG=latest
+      # - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+      - echo Connecting to Amazon ECR...
+      - aws --version
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_REPO_NAME
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
+
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t $IMAGE_REPO_NAME .
+      - docker tag $IMAGE_REPO_NAME:latest $REPOSITORY_URI:$IMAGE_TAG
+
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker images...
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      # - echo Updating services with force-new-deployment...
+      # - aws ecs update-service --cluster famhive-v2-dev-cluster --service web --force-new-deployment
+      - echo Writing image definitions file...
+      - printf '[{"name":"node-simple","imageUri":"%s"}]'
+        $REPOSITORY_URI:$IMAGE_TAG > node-simple-definitions.json
+      - cat node-simple-definitions.json
+artifacts:
+  files: node-simple-definitions.json
