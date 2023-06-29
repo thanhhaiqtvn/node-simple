@@ -6,6 +6,13 @@ git checkout develop
 # Make sure the main branch is up-to-date
 git pull origin develop
 
+
+# Get the latest tag
+latest_tag=$(git describe --tags --abbrev=0)
+echo "*****************************"
+echo "****** git tag latest: $latest_tag ******"
+echo "*****************************"
+
 # Enter the release version
 echo "Enter the release version (e.g. 1.0.0): "
 read version
