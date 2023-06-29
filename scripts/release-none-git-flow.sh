@@ -29,7 +29,7 @@ fi
 latest_tag=$(cat version.txt)
 
 echo "************************************"
-echo "****** git tag latest: $latest_tag ******"
+echo "****** git tag latest: \033[1;32m$latest_tag\033[0m ******"
 echo "************************************"
 
 # Enter the release version
