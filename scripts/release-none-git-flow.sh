@@ -18,6 +18,12 @@ echo "************************************"
 echo "Enter the release version (e.g. 1.0.0): "
 read version
 
+# Compare the versions
+if [[ "$version" < "$latest_tag" ]]; then
+  echo "Error: The release version cannot be less than the current version ($current_version). Please try again."
+  exit 1
+fi
+
 # Create a release branch
 git checkout -b release/$version
 
@@ -36,6 +42,7 @@ git tag "v$version"
 
 # Push the changes to the remote repository, including main branch and tags
 git push origin main
+git push origin develop
 git push origin "v$version"
 
 # Delete the local release branch
