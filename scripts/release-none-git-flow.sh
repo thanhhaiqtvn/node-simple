@@ -51,6 +51,8 @@ git tag "v$version"
 
 # Push the changes to the remote repository, including main, develop branches, and tags
 git push origin "v$version"
+git push origin main:main
+git push origin develop:develop
 
 # Delete the local release branch
 git branch -d release/$version
