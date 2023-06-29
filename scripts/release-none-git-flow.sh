@@ -1,14 +1,19 @@
 #!/bin/bash
 
-# Ensure you are on the main branch
+# Make sure not have any commit change in current branch.
+if [[ -n $(git status --porcelain) ]]; then
+  echo "Your working directory is not clean. Please commit or stash your changes before starting the release process."
+  exit 1
+fi
+
+# Ensure you are on the develop branch
 git checkout develop
 
-# Make sure the main branch is up-to-date
+# Make sure the develop branch is up-to-date
 git pull origin develop
 
 # Get the latest tag
 latest_tag=$(cat version.txt)
-# latest_tag=$(git describe --tags --abbrev=0)
 
 echo "************************************"
 echo "****** git tag latest: $latest_tag ******"
@@ -20,7 +25,7 @@ read version
 
 # Compare the versions
 if [[ "$version" -le "$latest_tag" ]]; then
-  echo "Error: The release version cannot be less than the current version ($current_version). Please try again."
+  echo "Error: The release version cannot be less than or equal to the current version ($latest_tag). Please try again."
   exit 1
 fi
 
@@ -37,13 +42,20 @@ git commit -m "Bump version to $version"
 git checkout main
 git merge release/$version --no-ff -m "Merge release $version into main"
 
+# Merge release branch into develop
+git checkout develop
+git merge main --no-ff -m "Merge main into develop"
+
 # Tag the release
 git tag "v$version"
 
-# Push the changes to the remote repository, including main branch and tags
+# Push the changes to the remote repository, including main, develop branches, and tags
 git push origin main
-git push origin develop
 git push origin "v$version"
+
+# Merge main branch into develop
+git checkout develop
+git merge main --no-ff
 
 # Delete the local release branch
 git branch -d release/$version
