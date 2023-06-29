@@ -7,8 +7,8 @@ git checkout develop
 git pull origin develop
 
 # Get the latest tag
-# latest_tag=$(cat version.txt)
-latest_tag=$(git describe --tags --abbrev=0)
+latest_tag=$(cat version.txt)
+# latest_tag=$(git describe --tags --abbrev=0)
 
 echo "************************************"
 echo "****** git tag latest: $latest_tag ******"
