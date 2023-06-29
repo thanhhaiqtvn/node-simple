@@ -9,9 +9,9 @@ git pull origin develop
 
 # Get the latest tag
 latest_tag=$(git describe --tags --abbrev=0)
-echo "*****************************"
+echo "************************************"
 echo "****** git tag latest: $latest_tag ******"
-echo "*****************************"
+echo "************************************"
 
 # Enter the release version
 echo "Enter the release version (e.g. 1.0.0): "
