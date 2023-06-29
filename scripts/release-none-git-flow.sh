@@ -17,8 +17,11 @@ git fetch --tags
 
 # Check version.txt exist
 if [[ ! -f version.txt ]]; then
+  echo "0.0.0" > version.txt
+  git add version.txt
+  git commit -m "Bump first version to 0.0.0"
+  git push origin develop:develop
   echo "Error: version.txt file not found."
-  echo "version=0.0.0" > version.txt
   exit 1
 fi
 
