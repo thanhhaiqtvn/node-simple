@@ -63,7 +63,7 @@ git merge release/$version --no-ff -m "Merge release $version into main"
 
 # Merge release branch into develop
 git checkout develop
-git merge main
+git merge main --no-ff
 
 # Tag the release
 git tag "v$version"
