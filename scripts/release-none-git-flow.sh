@@ -44,18 +44,13 @@ git merge release/$version --no-ff -m "Merge release $version into main"
 
 # Merge release branch into develop
 git checkout develop
-git merge main --no-ff -m
+git merge main
 
 # Tag the release
 git tag "v$version"
 
 # Push the changes to the remote repository, including main, develop branches, and tags
-git push origin main
 git push origin "v$version"
-
-# Merge main branch into develop
-git checkout develop
-git merge main --no-ff
 
 # Delete the local release branch
 git branch -d release/$version
