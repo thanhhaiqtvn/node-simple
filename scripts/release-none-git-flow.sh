@@ -6,9 +6,10 @@ git checkout develop
 # Make sure the main branch is up-to-date
 git pull origin develop
 
-
 # Get the latest tag
+# latest_tag=$(cat version.txt)
 latest_tag=$(git describe --tags --abbrev=0)
+
 echo "************************************"
 echo "****** git tag latest: $latest_tag ******"
 echo "************************************"
@@ -39,6 +40,7 @@ git push origin "v$version"
 
 # Delete the local release branch
 git branch -d release/$version
+git checkout develop
 
 # Optionally, delete the remote release branch
-git push origin --delete release/$version
+# git push origin --delete release/$version
