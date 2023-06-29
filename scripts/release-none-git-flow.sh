@@ -17,7 +17,7 @@ git fetch --tags
 
 # Check version.txt exist
 if [[ ! -f version.txt ]]; then
-  echo "version=0.0.0" > version.txt
+  echo "0.0.0" > version.txt
   git add version.txt
   git commit -m "Bump first version to 0.0.0"
   git push origin develop:develop
