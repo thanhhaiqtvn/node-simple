@@ -21,7 +21,7 @@ if [[ ! -f version.txt ]]; then
   git add version.txt
   git commit -m "Bump first version to 0.0.0"
   git push origin develop:develop
-  echo "Error: version.txt file not found."
+  echo "(\033[1;33mError!!!\033[0m): version.txt file not found."
   exit 1
 fi
 
@@ -38,13 +38,13 @@ read version
 
 # Check if the version is a valid number
 if ! [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-  echo "Error: Invalid release version. Please enter a valid version number (e.g., 1.0.0)."
+  echo "(\033[1;33mError!!!\033[0m): Invalid release version. Please enter a valid version number (e.g., 1.0.0)."
   exit 1
 fi
 
 # Compare the versions
 if [[ "$version" == "$latest_tag" || "$version" < "$latest_tag" ]]; then
-  echo "Error: The release version cannot be less than or equal to the current version ($latest_tag). Please try again."
+  echo "(\033[1;33mError!!!\033[0m): The release version cannot be less than or equal to the current version ($latest_tag). Please try again."
   exit 1
 fi
 
