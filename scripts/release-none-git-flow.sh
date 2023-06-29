@@ -19,7 +19,7 @@ echo "Enter the release version (e.g. 1.0.0): "
 read version
 
 # Compare the versions
-if [[ "$version" < "$latest_tag" ]]; then
+if [[ "$version" -le "$latest_tag" ]]; then
   echo "Error: The release version cannot be less than the current version ($current_version). Please try again."
   exit 1
 fi
